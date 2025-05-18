@@ -1,0 +1,21 @@
+:root {
+  /* Base theme colors */
+  --color-primary: #10B981;    /* Solid Green */
+  --color-secondary: #FCD34D;  /* Solid Yellow */
+  --color-accent: #EF4444;     /* Solid Red */
+  --color-dark: #111827;       /* Solid Black */
+
+  /* Color variations */
+  --color-primary-light: #34D399;
+  --color-primary-dark: #059669;
+  --color-secondary-light: #FBBF24;
+  --color-secondary-dark: #F59E0B;
+  --color-accent-light: #F87171;
+  --color-accent-dark: #DC2626;
+  
+  /* Text colors */
+  --text-on-primary: #FFFFFF;
+  --text-on-secondary: #111827;
+  --text-on-accent: #FFFFFF;
+  --text-on-dark: #FFFFFF;
+}

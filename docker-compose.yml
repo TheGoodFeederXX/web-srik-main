@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: websrik
+      POSTGRES_PASSWORD: websrikpass
+      POSTGRES_DB: websrik
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U websrik"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  flask_api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "postgresql://websrik:websrikpass@db:5432/websrik"
+      FLASK_ENV: development
+      FLASK_APP: app/main.py
+    volumes:
+      - ./api/app/uploads:/app/uploads
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  nextjs_app:
+    build:
+      context: ./web-srik
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "postgresql://websrik:websrikpass@db:5432/websrik?schema=public"
+      NODE_ENV: development
+      POSTGRES_USER: websrik
+      POSTGRES_PASSWORD: websrikpass
+      POSTGRES_DB: websrik
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      flask_api:
+        condition: service_started
+    volumes:
+      - ./web-srik:/app
+      - node_modules:/app/node_modules
+      - /app/node_modules
+      - /app/.next
+      - /app/prisma
+
+volumes:
+  postgres_data:
+  node_modules:
