@@ -25,12 +25,12 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Theme colors
+        // Theme colors - Aligned with web-guru
         theme: {
-          primary: "#10B981",    // Solid Green
-          secondary: "#FCD34D",  // Solid Yellow
-          accent: "#EF4444",     // Solid Red
-          dark: "#111827",       // Solid Black
+          primary: "#10B981",    // Solid Green - Same as HSL 142.1 76.2% 36.3%
+          secondary: "#E2E8F0",  // Light Gray - Aligned with HSL 210 40% 96.1%
+          accent: "#94A3B8",     // Muted Blue - For accent elements
+          dark: "#0F172A",       // Dark Blue - Aligned with HSL 222.2 84% 4.9%
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

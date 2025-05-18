@@ -1,17 +1,17 @@
 :root {
-  /* Base theme colors */
-  --color-primary: #10B981;    /* Solid Green */
-  --color-secondary: #FCD34D;  /* Solid Yellow */
-  --color-accent: #EF4444;     /* Solid Red */
-  --color-dark: #111827;       /* Solid Black */
+  /* Base theme colors - Aligned with web-guru */
+  --color-primary: #10B981;    /* Solid Green - Same as HSL 142.1 76.2% 36.3% */
+  --color-secondary: #E2E8F0;  /* Light Gray - Aligned with HSL 210 40% 96.1% */
+  --color-accent: #94A3B8;     /* Muted Blue - For accent elements */
+  --color-dark: #0F172A;       /* Dark Blue - Aligned with HSL 222.2 84% 4.9% */
 
   /* Color variations */
   --color-primary-light: #34D399;
   --color-primary-dark: #059669;
-  --color-secondary-light: #FBBF24;
-  --color-secondary-dark: #F59E0B;
-  --color-accent-light: #F87171;
-  --color-accent-dark: #DC2626;
+  --color-secondary-light: #F1F5F9;
+  --color-secondary-dark: #CBD5E1;
+  --color-accent-light: #CBD5E1;
+  --color-accent-dark: #64748B;
   
   /* Text colors */
   --text-on-primary: #FFFFFF;

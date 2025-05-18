@@ -9,7 +9,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-emerald-900 text-white">
+    <footer className="bg-theme-primary text-primary-foreground">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
           <motion.div
@@ -27,11 +27,11 @@ export default function Footer() {
                 className="h-14 w-auto"
               />
               <div className="flex flex-col">
-                <span className="font-bold text-white text-lg leading-tight">Sekolah Rendah Islam</span>
-                <span className="font-bold text-emerald-300 text-xl leading-tight">Al-Khairiah</span>
+                <span className="font-bold text-primary-foreground text-lg leading-tight">Sekolah Rendah Islam</span>
+                <span className="font-bold text-secondary text-xl leading-tight">Al-Khairiah</span>
               </div>
             </Link>
-            <p className="text-emerald-100">
+            <p className="text-primary-foreground/80">
               Membentuk generasi berilmu, berakhlak mulia dan berdaya saing dalam persekitaran pembelajaran yang
               kondusif.
             </p>
@@ -43,10 +43,10 @@ export default function Footer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className="text-xl font-bold text-white">Pautan</h3>
+            <h3 className="text-xl font-bold text-primary-foreground">Pautan</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-emerald-100 hover:text-white transition-colors">
+                <Link href="#" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Utama
                 </Link>
               </li>
@@ -82,7 +82,7 @@ export default function Footer() {
             <h3 className="text-xl font-bold text-white">Hubungi Kami</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-emerald-300 mt-0.5" />
+                <MapPin className="h-5 w-5 text-secondary mt-0.5" />
                 <span className="text-emerald-100">Jalan Pedu, 06300 Kuala Nerang, Kedah</span>
               </li>
               <li className="flex items-center gap-3">
@@ -146,9 +146,9 @@ export default function Footer() {
           </motion.div>
         </div>
 
-        <div className="border-t border-emerald-800 py-6 text-center">
+        <div className="border-t border-primary-foreground/20 py-6 text-center">
           <p className="text-emerald-100">
-            &copy; {currentYear} Sekolah Rendah Islam Al-Khairiah. Hak Cipta Terpelihara.
+            &copy; {currentYear} Sekolah Rendah Islam Al-Khairiah. Dibina oleh Mohamad Zulnajmi. Hak Cipta Terpelihara.
           </p>
         </div>
       </div>
