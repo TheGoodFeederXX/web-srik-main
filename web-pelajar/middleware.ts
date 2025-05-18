@@ -1,32 +1,41 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+// Define the paths that require authentication
+const protectedPaths = [
+  "/dashboard",
+  "/admin"
+]
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+// Define the paths that should be accessible only when NOT authenticated
+const authPaths = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password"
+]
 
-  // Check if the user is authenticated
-  const isAuth = !!session
-  const isAuthPage =
-    req.nextUrl.pathname.startsWith("/login") ||
-    req.nextUrl.pathname.startsWith("/register") ||
-    req.nextUrl.pathname.startsWith("/forgot-password") ||
-    req.nextUrl.pathname.startsWith("/reset-password")
-  const isHomePage = req.nextUrl.pathname === "/"
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  const token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET 
+  })
 
-  // If user is not authenticated and trying to access a protected route
-  if (!isAuth && req.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/login", req.url))
+  // Handle protected paths - require authentication
+  if (protectedPaths.some(path => pathname.startsWith(path))) {
+    if (!token) {
+      const loginUrl = new URL("/login", request.url)
+      loginUrl.searchParams.set("callbackUrl", request.url)
+      return NextResponse.redirect(loginUrl)
+    }
+    return NextResponse.next()
   }
 
-  // If user is authenticated and trying to access auth pages
-  if (isAuth && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", req.url))
+  // Handle auth paths - redirect if already authenticated
+  if (authPaths.some(path => pathname.startsWith(path)) && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return res

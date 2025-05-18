@@ -1,3 +1,5 @@
+import { createClient } from "./supabase/client"
+
 // Authentication Token Management
 export function setAuthToken(token: string) {
   if (typeof window !== "undefined") {
@@ -16,6 +18,21 @@ export function removeAuthToken() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("authToken")
   }
+}
+
+// Supabase auth helpers
+export async function signInWithSupabase(email: string, password: string) {
+  const supabase = createClient()
+  return await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
+}
+
+export async function signOutWithSupabase() {
+  const supabase = createClient()
+  removeAuthToken()
+  return await supabase.auth.signOut()
 }
 
 // JWT Payload Type

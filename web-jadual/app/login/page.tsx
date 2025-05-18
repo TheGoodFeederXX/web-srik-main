@@ -1,15 +1,12 @@
-import { createClient } from "@/lib/supabase/server"
+import { getServerSession } from "next-auth/next"
 import { redirect } from "next/navigation"
 import { LoginForm } from "@/components/auth/login-form"
 import Image from "next/image"
+import { authOptions } from "@/lib/auth"
 
 export default async function LoginPage() {
-  const supabase = createClient()
-
-  // Check if user is already logged in
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  // Check if user is already logged in using NextAuth
+  const session = await getServerSession(authOptions)
 
   // If logged in, redirect to dashboard
   if (session) {

@@ -4,48 +4,72 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { signIn } from "next-auth/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+
+const formSchema = z.object({
+  email: z.string()
+    .email({
+      message: "Sila masukkan alamat emel yang sah.",
+    })
+    .refine((email) => email.endsWith("@srialkhairiah.my"), {
+      message: "Hanya alamat emel @srialkhairiah.my dibenarkan.",
+    }),
+  password: z.string().min(6, {
+    message: "Kata laluan mestilah sekurang-kurangnya 6 aksara.",
+  }),
+})
 
 export function LoginForm() {
   const router = useRouter()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
 
     try {
-      const supabase = createClient()
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
       })
 
-      if (error) {
-        throw error
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Ralat log masuk",
+          description: "Emel atau kata laluan tidak sah.",
+        })
+      } else {
+        toast({
+          title: "Berjaya log masuk",
+          description: "Anda telah berjaya log masuk ke sistem",
+        })
+        router.push("/dashboard")
+        router.refresh()
       }
-
-      toast({
-        title: "Berjaya log masuk",
-        description: "Anda telah berjaya log masuk ke sistem",
-      })
-
-      router.push("/dashboard")
-      router.refresh()
     } catch (error) {
       toast({
-        title: "Ralat log masuk",
-        description: "Email atau kata laluan tidak sah",
         variant: "destructive",
+        title: "Ralat log masuk",
+        description: "Sila cuba lagi kemudian.",
       })
     } finally {
       setIsLoading(false)
@@ -53,38 +77,47 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <div className="mt-1">
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-      </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="email">Email</Label>
+              <FormControl>
+                <Input
+                  id="email"
+                  placeholder="contoh@srialkhairiah.my"
+                  type="email"
+                  autoComplete="email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <div>
-        <Label htmlFor="password">Kata Laluan</Label>
-        <div className="mt-1">
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-      </div>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="password">Kata Laluan</Label>
+              <FormControl>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <div>
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>
@@ -95,7 +128,7 @@ export function LoginForm() {
             "Log Masuk"
           )}
         </Button>
-      </div>
-    </form>
+      </form>
+    </Form>
   )
 }

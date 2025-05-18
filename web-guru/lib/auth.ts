@@ -6,7 +6,7 @@ import { createServerClient } from "@supabase/ssr"
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "SRIA SSO",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -14,6 +14,11 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null
+        }
+        
+        // Verify the email domain is from srialkhairiah.my
+        if (!credentials.email.endsWith('@srialkhairiah.my')) {
+          throw new Error('Only srialkhairiah.my email addresses are allowed')
         }
 
         const cookieStore = cookies()

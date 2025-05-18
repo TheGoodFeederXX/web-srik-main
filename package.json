@@ -1,0 +1,16 @@
+{
+  "name": "web-srik-main",
+  "version": "1.0.0",
+  "description": "SRIK Web Platform",
+  "scripts": {
+    "seed-admin": "ts-node scripts/seed-admin.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

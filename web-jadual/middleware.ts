@@ -1,32 +1,41 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+// Define the paths that require authentication
+const protectedPaths = [
+  "/dashboard",
+  "/admin"
+]
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+// Define the paths that should be accessible only when NOT authenticated
+const authPaths = [
+  "/login"
+]
 
-  // If user is not signed in and the current path is not /login,
-  // redirect the user to /login
-  if (!session && req.nextUrl.pathname !== "/login") {
-    const redirectUrl = req.nextUrl.clone()
-    redirectUrl.pathname = "/login"
-    return NextResponse.redirect(redirectUrl)
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  const token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET 
+  })
+
+  // Handle protected paths - require authentication
+  if (protectedPaths.some(path => pathname.startsWith(path))) {
+    if (!token) {
+      const loginUrl = new URL("/login", request.url)
+      loginUrl.searchParams.set("callbackUrl", request.url)
+      return NextResponse.redirect(loginUrl)
+    }
+    return NextResponse.next()
   }
 
-  // If user is signed in and the current path is /login,
-  // redirect the user to /dashboard
-  if (session && req.nextUrl.pathname === "/login") {
-    const redirectUrl = req.nextUrl.clone()
-    redirectUrl.pathname = "/dashboard"
-    return NextResponse.redirect(redirectUrl)
+  // Handle auth paths - redirect if already authenticated
+  if (authPaths.some(path => pathname === path) && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
-  return res
+  return NextResponse.next()
 }
 
 export const config = {

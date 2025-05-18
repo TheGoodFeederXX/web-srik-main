@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -14,9 +15,13 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Sila masukkan alamat emel yang sah.",
-  }),
+  email: z.string()
+    .email({
+      message: "Sila masukkan alamat emel yang sah.",
+    })
+    .refine((email) => email.endsWith("@srialkhairiah.my"), {
+      message: "Hanya alamat emel @srialkhairiah.my dibenarkan.",
+    }),
   password: z.string().min(6, {
     message: "Kata laluan mestilah sekurang-kurangnya 6 aksara.",
   }),
@@ -85,7 +90,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Emel</FormLabel>
                   <FormControl>
-                    <Input placeholder="contoh@alkhairiah.edu.my" {...field} />
+                    <Input placeholder="contoh@srialkhairiah.my" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

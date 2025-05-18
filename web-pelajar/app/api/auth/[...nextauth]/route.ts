@@ -19,6 +19,11 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
+        
+        // Verify the email domain is from srialkhairiah.my
+        if (!credentials.email.endsWith('@srialkhairiah.my')) {
+          throw new Error('Only srialkhairiah.my email addresses are allowed')
+        }
 
         const user = await prisma.user.findUnique({
           where: {
