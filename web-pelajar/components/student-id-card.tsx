@@ -60,7 +60,7 @@ export function StudentIdCard({ student }: StudentIdCardProps) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Kad Pengenalan Pelajar</h3>
+        <h3 className="text-lg font-medium">Kad Pelajar</h3>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handlePrint}>
             <Printer className="h-4 w-4 mr-2" />

@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation"
 import { FeePaymentList } from "@/components/fee-payment-list"
 import { FeePaymentHistory } from "@/components/fee-payment-history"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 
 export default async function FeePaymentPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
 
   const {
     data: { session },
@@ -55,3 +55,4 @@ export default async function FeePaymentPage() {
     </div>
   )
 }
+

@@ -5,11 +5,11 @@ import { AlertCircle } from "lucide-react"
 import { AcademicClassInfo } from "@/components/academic-class-info"
 import { ExamResults } from "@/components/exam-results"
 import Link from "next/link"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 
 export default async function AcademicInfoPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
 
   const {
     data: { session },
@@ -87,3 +87,4 @@ export default async function AcademicInfoPage() {
     </div>
   )
 }
+

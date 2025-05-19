@@ -4,7 +4,8 @@ import * as dotenv from "dotenv"
 // Load environment variables from .env
 dotenv.config()
 
-// Initialize Supabase client with service role key for admin operations
+// Note: This script doesn't use the standardized createAdminClient() function
+// since it needs to be run outside of the Next.js context where cookies are available
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,

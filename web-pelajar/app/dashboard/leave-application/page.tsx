@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation"
 import { LeaveApplicationForm } from "@/components/leave-application-form"
 import { LeaveApplicationList } from "@/components/leave-application-list"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 
 export default async function LeaveApplicationPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
 
   const {
     data: { session },
@@ -51,3 +51,4 @@ export default async function LeaveApplicationPage() {
     </div>
   )
 }
+

@@ -2,11 +2,11 @@ import { redirect } from "next/navigation"
 import { StudentProfile } from "@/components/student-profile"
 import { StudentIdCard } from "@/components/student-id-card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
 
 export default async function StudentInfoPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
 
   const {
     data: { session },
@@ -52,3 +52,4 @@ export default async function StudentInfoPage() {
     </div>
   )
 }
+

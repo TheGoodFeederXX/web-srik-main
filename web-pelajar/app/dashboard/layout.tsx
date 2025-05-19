@@ -4,15 +4,15 @@ import { UserNav } from "@/components/user-nav"
 import { redirect } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
+import { createClient } from "@/lib/supabase/server"
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
 
   const {
     data: { session },

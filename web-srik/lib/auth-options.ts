@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth"
 import { cookies } from "next/headers"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { createClient } from "@/lib/supabase/server"
 import { createServerClient } from "@supabase/ssr"
 
 export const authOptions: NextAuthOptions = {
@@ -19,25 +20,8 @@ export const authOptions: NextAuthOptions = {
         // Verify the email domain is from srialkhairiah.my
         if (!credentials.email.endsWith('@srialkhairiah.my')) {
           throw new Error('Only srialkhairiah.my email addresses are allowed')
-        }
-
-        const cookieStore = cookies()
-        const supabase = createServerClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          {
-            cookies: {
-              get(name: string) {
-                return cookieStore.get(name)?.value
-              },
-              set(name: string, value: string, options: any) {
-                cookieStore.set({ name, value, ...options })
-              },
-              remove(name: string, options: any) {
-                cookieStore.set({ name, value: "", ...options })
-              },
-            },
-          },
+        }        // Use standardized client implementation
+        const supabase = createClient(),
         )
 
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -90,3 +74,4 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 }
+

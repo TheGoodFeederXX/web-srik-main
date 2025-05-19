@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClient } from "@/lib/supabase/client"
+import { createBrowserClient } from "@supabase/ssr"
 import type { SupabaseClient, User } from "@supabase/supabase-js"
 import type { Database } from "@/lib/database.types"
 
@@ -14,7 +15,7 @@ type SupabaseContext = {
 const Context = createContext<SupabaseContext | undefined>(undefined)
 
 export function SupabaseProvider({ children }: { children: React.ReactNode }) {
-  const [supabase] = useState(() => createClientComponentClient<Database>())
+  const [supabase] = useState(() => createClient())
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -44,3 +45,4 @@ export const useSupabase = () => {
   }
   return context
 }
+

@@ -1,24 +1,11 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { createServerClient } from "@supabase/ssr"
+import { createClient } from "@/lib/supabase/server"
 import type { TeacherDetails } from "@/types/teacher"
 
 export async function getTeacherDetails(userId: string) {
-  const cookieStore = cookies()
-  const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
-    cookies: {
-      get(name: string) {
-        return cookieStore.get(name)?.value
-      },
-      set(name: string, value: string, options: any) {
-        cookieStore.set({ name, value, ...options })
-      },
-      remove(name: string, options: any) {
-        cookieStore.set({ name, value: "", ...options })
-      },
-    },
-  })
+  const supabase = createClient()
 
   const { data, error } = await supabase.from("teacher_details").select("*").eq("id", userId).single()
 
@@ -30,20 +17,7 @@ export async function getTeacherDetails(userId: string) {
 }
 
 export async function updateTeacherDetails(details: Partial<TeacherDetails>) {
-  const cookieStore = cookies()
-  const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
-    cookies: {
-      get(name: string) {
-        return cookieStore.get(name)?.value
-      },
-      set(name: string, value: string, options: any) {
-        cookieStore.set({ name, value, ...options })
-      },
-      remove(name: string, options: any) {
-        cookieStore.set({ name, value: "", ...options })
-      },
-    },
-  })
+  const supabase = createClient()
 
   // Check if teacher details already exist
   const { data: existingData } = await supabase.from("teacher_details").select("id").eq("id", details.id).single()
@@ -104,3 +78,4 @@ export async function updateTeacherDetails(details: Partial<TeacherDetails>) {
 
   return true
 }
+
