@@ -54,13 +54,13 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ClientPathCheck>
-              {(isDashboard) => (
+              {(shouldHideNavbar) => (
                 <div className="min-h-screen bg-background dark:bg-gray-950">
-                  {!isDashboard && <Navbar />}
-                  <main className="overflow-hidden">
+                  {!shouldHideNavbar && <Navbar />}
+                  <main className={`overflow-hidden ${!shouldHideNavbar ? 'pt-24 md:pt-28' : ''}`}>
                     {children}
                   </main>
-                  {!isDashboard && <Footer />}
+                  {!shouldHideNavbar && <Footer />}
                 </div>
               )}
             </ClientPathCheck>
