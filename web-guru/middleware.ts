@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getToken } from "next-auth/jwt"
+import { verify } from 'jsonwebtoken'
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const COOKIE_NAME = 'auth_token';
 
 // Define the paths that require authentication
 const protectedPaths = [
@@ -15,14 +18,13 @@ const authPaths = [
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const token = await getToken({ 
-    req: request, 
-    secret: process.env.NEXTAUTH_SECRET 
-  })
+  const token = request.cookies.get(COOKIE_NAME)?.value
 
+  // Verify authentication
+  const isAuthenticated = token ? await verifyToken(token) : false
   // Handle protected paths - require authentication
   if (protectedPaths.some(path => pathname.startsWith(path))) {
-    if (!token) {
+    if (!isAuthenticated) {
       const loginUrl = new URL("/", request.url)
       loginUrl.searchParams.set("callbackUrl", request.url)
       return NextResponse.redirect(loginUrl)
@@ -31,11 +33,20 @@ export async function middleware(request: NextRequest) {
   }
 
   // Handle auth paths - redirect if already authenticated
-  if (authPaths.some(path => pathname === path) && token) {
+  if (authPaths.some(path => pathname === path) && isAuthenticated) {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return NextResponse.next()
+}
+
+async function verifyToken(token: string): Promise<boolean> {
+  try {
+    const decoded = verify(token, JWT_SECRET)
+    return !!decoded
+  } catch {
+    return false
+  }
 }
 
 export const config = {

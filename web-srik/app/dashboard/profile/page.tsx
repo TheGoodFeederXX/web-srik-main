@@ -1,9 +1,8 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth-options"
+import { getSession } from "@/lib/auth"
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions)
+  const session = await getSession()
   
   return (
     <div className="container mx-auto px-4">

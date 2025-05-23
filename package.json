@@ -2,11 +2,14 @@
   "name": "web-srik-main",
   "version": "1.0.0",
   "description": "SRIK Web Platform",
+  "private": true,
   "scripts": {
-    "seed-admin": "ts-node scripts/seed-admin.ts"
+    "seed-admin": "ts-node scripts/seed-admin.ts",
+    "dev": "pnpm --parallel run dev",
+    "build": "pnpm --parallel run build",
+    "lint": "pnpm --parallel run lint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.4",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {

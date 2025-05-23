@@ -1,10 +1,11 @@
 "use client"
 
-import { signOut } from "next-auth/react"
 import Link from "next/link"
-import type { User } from "next-auth"
+import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/components/auth-provider"
+import type { User } from "@/lib/auth"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,12 +53,17 @@ export function UserNav({ user }: UserNavProps) {
             <span>Profil</span>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
+        <DropdownMenuSeparator />        <DropdownMenuItem
           className="cursor-pointer"
-          onSelect={(event) => {
+          onSelect={async (event) => {
             event.preventDefault()
-            signOut({ callbackUrl: "/" })
+            try {
+              const { signOut } = useAuth()
+              await signOut()
+              window.location.href = "/"
+            } catch (error) {
+              console.error("Error signing out:", error)
+            }
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />

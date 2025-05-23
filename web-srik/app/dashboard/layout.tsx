@@ -1,14 +1,13 @@
 import { DashboardNav } from "@/components/dashboard-nav"
 import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth-options"
+import { getSession } from "@/lib/auth"
 
 export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
+  const session = await getSession()
   
   if (!session) {
     redirect("/login")

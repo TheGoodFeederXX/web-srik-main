@@ -1,17 +1,15 @@
 import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth-options"
 import { Button } from "@/components/ui/button"
 import { SignOutButton } from "@/components/signout-button"
 import Link from "next/link"
+import { getSession } from "@/lib/auth"
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getSession()
   
   if (!session) {
     redirect("/login")
   }
-  
   return (
     <div className="container max-w-7xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">

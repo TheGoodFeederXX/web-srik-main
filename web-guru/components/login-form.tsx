@@ -2,11 +2,11 @@
 "use client"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useAuth } from "@/components/auth-provider"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -39,27 +39,19 @@ export function LoginForm() {
       password: "",
     },
   })
+  const { signIn } = useAuth()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
 
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
+      await signIn(values.email, values.password)
+      router.push("/dashboard")
+      router.refresh()
+      toast({
+        title: "Log masuk berjaya",
+        description: "Selamat datang ke sistem SRI Al-Khairiah.",
       })
-
-      if (result?.error) {
-        toast({
-          variant: "destructive",
-          title: "Ralat log masuk",
-          description: "Emel atau kata laluan tidak sah.",
-        })
-      } else {
-        router.push("/dashboard")
-        router.refresh()
-      }
     } catch (error) {
       toast({
         variant: "destructive",

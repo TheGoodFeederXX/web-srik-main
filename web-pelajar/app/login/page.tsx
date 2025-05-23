@@ -8,7 +8,7 @@ export default function LoginPage() {
       <div className="container mx-auto px-4 py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/placeholder.svg?height=50&width=50"
+            src="https://db-pic.thegoodfeeder.xyz/logo.png"
             alt="Sekolah Rendah Islam Al-Khairiah"
             width={50}
             height={50}
@@ -17,15 +17,15 @@ export default function LoginPage() {
           <h1 className="text-xl font-bold">Sekolah Rendah Islam Al-Khairiah</h1>
         </Link>
       </div>
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center">''
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold">Log Masuk</h2>
-            <p className="text-gray-600">Masukkan maklumat log masuk anda</p>
+            <p className="text-gray-600">Masukkan maklumat log masuk anda</p>j
           </div>
           <LoginForm />
         </div>
-      </div>
+      </div>''
     </div>
   )
 }
